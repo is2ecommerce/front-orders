@@ -1,1 +1,24 @@
-/* You can add global styles to this file, and also import other style files */
+/* Paleta de colores inspirada en Amazon */
+:root {
+  /* Colores principales */
+  --primary-orange: #e47911;
+  --primary-dark: #232f3e;
+  --primary-black: #111111;
+  
+  /* Colores secundarios */
+  --secondary-blue-light: #48a3c6;
+  --secondary-blue: #007eb9;
+  
+  /* Colores neutros */
+  --white: #ffffff;
+  --gray-dark: #37475a;
+  --gray-light: #cccccc;
+  
+  /* Uso específico */
+  --color-primary: var(--primary-dark);
+  --color-accent: var(--primary-orange);
+  --color-text: var(--primary-black);
+  --color-text-secondary: var(--gray-dark);
+  --color-border: var(--gray-light);
+  --color-link: var(--secondary-blue);
+}

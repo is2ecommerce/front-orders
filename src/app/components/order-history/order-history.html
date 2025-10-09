@@ -1,0 +1,103 @@
+<div class="order-history-container">
+  <div class="header">
+    <h1>Historial de Órdenes</h1>
+    <p class="subtitle">Consulta todas tus compras anteriores</p>
+  </div>
+
+  <div class="orders-list" *ngIf="orders.length > 0; else noOrders">
+    <div class="order-card" *ngFor="let order of orders">
+      <div class="order-header">
+        <div class="order-info">
+          <h3 class="order-number">{{ order.orderNumber }}</h3>
+          <p class="order-date">{{ formatDate(order.date) }}</p>
+        </div>
+        <div class="order-status">
+          <span class="status-badge" [ngClass]="getStatusClass(order.status)">
+            {{ order.status }}
+          </span>
+        </div>
+      </div>
+
+      <div class="order-body">
+        <div class="products-summary">
+          <p class="product-count">{{ order.products.length }} producto(s)</p>
+          <ul class="product-list-summary">
+            <li *ngFor="let product of order.products">
+              {{ product.name }} (x{{ product.quantity }})
+            </li>
+          </ul>
+        </div>
+        
+        <div class="order-total">
+          <p class="total-label">Total:</p>
+          <p class="total-amount">{{ formatCurrency(order.total) }}</p>
+        </div>
+      </div>
+
+      <div class="order-footer">
+        <button class="btn-details" (click)="viewOrderDetails(order)">
+          Ver detalles
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noOrders>
+    <div class="no-orders">
+      <p>No tienes órdenes en tu historial</p>
+    </div>
+  </ng-template>
+</div>
+
+<!-- Modal de detalles de orden -->
+<div class="modal-overlay" *ngIf="selectedOrder" (click)="closeOrderDetails()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Detalle de Orden</h2>
+      <button class="btn-close" (click)="closeOrderDetails()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="detail-section">
+        <h3>Información General</h3>
+        <div class="detail-row">
+          <span class="label">Número de Orden:</span>
+          <span class="value">{{ selectedOrder.orderNumber }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Fecha:</span>
+          <span class="value">{{ formatDate(selectedOrder.date) }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Estado:</span>
+          <span class="value">
+            <span class="status-badge" [ngClass]="getStatusClass(selectedOrder.status)">
+              {{ selectedOrder.status }}
+            </span>
+          </span>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <h3>Productos</h3>
+        <div class="product-detail" *ngFor="let product of selectedOrder.products">
+          <div class="product-info-detail">
+            <p class="product-name-detail">{{ product.name }}</p>
+            <p class="product-quantity">Cantidad: {{ product.quantity }}</p>
+          </div>
+          <div class="product-price-detail">
+            <p>{{ formatCurrency(product.price) }}</p>
+            <p class="subtotal">Subtotal: {{ formatCurrency(product.price * product.quantity) }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-section total-section">
+        <div class="detail-row total-row">
+          <span class="label">Total de la Orden:</span>
+          <span class="value total-value">{{ formatCurrency(selectedOrder.total) }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
