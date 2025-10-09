@@ -10,10 +10,13 @@ import { Order, OrderStatus, Product } from '../../models/order.model';
 })
 export class OrderHistory implements OnInit {
   orders: Order[] = [];
+  filteredOrders: Order[] = [];
   selectedOrder: Order | null = null;
+  selectedFilter: string = 'all';
 
   ngOnInit(): void {
     this.loadMockOrders();
+    this.filteredOrders = this.orders;
   }
 
   loadMockOrders(): void {
@@ -94,6 +97,20 @@ export class OrderHistory implements OnInit {
         ]
       }
     ];
+  }
+
+  filterOrders(filter: string): void {
+    this.selectedFilter = filter;
+
+    if (filter === 'all') {
+      this.filteredOrders = this.orders;
+    } else if (filter === 'delivered') {
+      this.filteredOrders = this.orders.filter(order => order.status === OrderStatus.DELIVERED);
+    } else if (filter === 'shipped') {
+      this.filteredOrders = this.orders.filter(order => order.status === OrderStatus.SHIPPED);
+    } else if (filter === 'processing') {
+      this.filteredOrders = this.orders.filter(order => order.status === OrderStatus.PROCESSING);
+    }
   }
 
   viewOrderDetails(order: Order): void {

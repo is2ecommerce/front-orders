@@ -4,8 +4,37 @@
     <p class="subtitle">Consulta todas tus compras anteriores</p>
   </div>
 
-  <div class="orders-list" *ngIf="orders.length > 0; else noOrders">
-    <div class="order-card" *ngFor="let order of orders">
+  <!-- Filtros -->
+  <div class="filters-container">
+    <span class="filter-label">Filtrar por estado:</span>
+    <button 
+      class="filter-btn" 
+      [class.active]="selectedFilter === 'all'"
+      (click)="filterOrders('all')">
+      Todas
+    </button>
+    <button 
+      class="filter-btn" 
+      [class.active]="selectedFilter === 'delivered'"
+      (click)="filterOrders('delivered')">
+      Entregado
+    </button>
+    <button 
+      class="filter-btn" 
+      [class.active]="selectedFilter === 'shipped'"
+      (click)="filterOrders('shipped')">
+      Enviado
+    </button>
+    <button 
+      class="filter-btn" 
+      [class.active]="selectedFilter === 'processing'"
+      (click)="filterOrders('processing')">
+      En proceso
+    </button>
+  </div>
+
+  <div class="orders-list" *ngIf="filteredOrders.length > 0; else noOrders">
+    <div class="order-card" *ngFor="let order of filteredOrders">
       <div class="order-header">
         <div class="order-info">
           <h3 class="order-number">{{ order.orderNumber }}</h3>
@@ -44,7 +73,7 @@
 
   <ng-template #noOrders>
     <div class="no-orders">
-      <p>No tienes órdenes en tu historial</p>
+      <p>No se encontraron órdenes con el filtro seleccionado</p>
     </div>
   </ng-template>
 </div>
