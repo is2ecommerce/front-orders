@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { Order, OrderStatus, Product } from '../../models/order.model';
 
 @Component({
@@ -10,10 +11,15 @@ import { Order, OrderStatus, Product } from '../../models/order.model';
 })
 export class OrderHistory implements OnInit {
   orders: Order[] = [];
+  filteredOrders: Order[] = [];
   selectedOrder: Order | null = null;
+  selectedFilter: string = 'all';
+
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.loadMockOrders();
+    this.filteredOrders = this.orders;
   }
 
   loadMockOrders(): void {
@@ -92,12 +98,44 @@ export class OrderHistory implements OnInit {
             quantity: 1
           }
         ]
+      },
+      {
+        orderNumber: 'ORD-2024-005',
+        date: new Date('2024-10-21'),
+        total: 189000,
+        status: OrderStatus.PENDING,
+        products: [
+          {
+            id: 8,
+            name: 'Tablet Samsung Galaxy Tab S9',
+            price: 189000,
+            quantity: 1
+          }
+        ]
       }
     ];
   }
 
+  filterOrders(filter: string): void {
+    this.selectedFilter = filter;
+
+    if (filter === 'all') {
+      this.filteredOrders = this.orders;
+    } else if (filter === 'delivered') {
+      this.filteredOrders = this.orders.filter(order => order.status === OrderStatus.DELIVERED);
+    } else if (filter === 'shipped') {
+      this.filteredOrders = this.orders.filter(order => order.status === OrderStatus.SHIPPED);
+    } else if (filter === 'processing') {
+      this.filteredOrders = this.orders.filter(order => order.status === OrderStatus.PROCESSING);
+    }
+  }
+
   viewOrderDetails(order: Order): void {
     this.selectedOrder = order;
+  }
+
+  payOrder(order: Order): void {
+    this.router.navigate(['/pago'], { state: { order } });
   }
 
   closeOrderDetails(): void {

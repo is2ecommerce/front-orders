@@ -1,9 +1,13 @@
+/* Importar fuente moderna y legible */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 .order-history-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
   background-color: #f5f5f5;
   min-height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .header {
@@ -11,14 +15,63 @@
 }
 
 .header h1 {
-  color: var(--primary-black);
+  color: var(--color-text);
   font-size: 2rem;
   margin-bottom: 0.5rem;
 }
 
 .subtitle {
-  color: var(--gray-dark);
+  color: var(--color-text-secondary);
   font-size: 1rem;
+}
+
+/* Filtros */
+.filters-container {
+  margin-bottom: 2rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 1.5rem;
+  background-color: var(--white);
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+}
+
+.filter-label {
+  color: var(--color-text);
+  font-weight: 600;
+  font-size: 1rem;
+  margin-right: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.filter-btn {
+  padding: 0.6rem 1.2rem;
+  border: 2px solid var(--color-border);
+  background-color: var(--white);
+  color: var(--color-text-secondary);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.filter-btn.active {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--white);
+}
+
+.filter-btn.active:hover {
+  background-color: #c86500;
+  border-color: #c86500;
 }
 
 /* Lista de órdenes */
@@ -30,7 +83,7 @@
 
 .order-card {
   background-color: var(--white);
-  border: 1px solid var(--gray-light);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   padding: 1.5rem;
   transition: box-shadow 0.3s ease;
@@ -46,18 +99,18 @@
   align-items: flex-start;
   margin-bottom: 1rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid var(--gray-light);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .order-number {
-  color: var(--primary-black);
+  color: var(--color-text);
   font-size: 1.25rem;
   font-weight: 600;
   margin: 0 0 0.25rem 0;
 }
 
 .order-date {
-  color: var(--gray-dark);
+  color: var(--color-text-secondary);
   font-size: 0.9rem;
   margin: 0;
 }
@@ -110,7 +163,7 @@
 }
 
 .product-count {
-  color: var(--gray-dark);
+  color: var(--color-text-secondary);
   font-weight: 500;
   margin-bottom: 0.5rem;
 }
@@ -122,7 +175,7 @@
 }
 
 .product-list-summary li {
-  color: var(--gray-dark);
+  color: var(--color-text-secondary);
   font-size: 0.9rem;
   padding: 0.25rem 0;
 }
@@ -132,13 +185,13 @@
 }
 
 .total-label {
-  color: var(--gray-dark);
+  color: var(--color-text-secondary);
   font-size: 0.9rem;
   margin: 0 0 0.25rem 0;
 }
 
 .total-amount {
-  color: var(--primary-black);
+  color: var(--color-text);
   font-size: 1.5rem;
   font-weight: 600;
   margin: 0;
@@ -148,10 +201,27 @@
 .order-footer {
   display: flex;
   justify-content: flex-end;
+  gap: 1rem;
+}
+
+.btn-pay-order {
+  background-color: var(--secondary-blue);
+  color: var(--white);
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-pay-order:hover {
+  background-color: #006399;
 }
 
 .btn-details {
-  background-color: var(--primary-orange);
+  background-color: var(--color-accent);
   color: var(--white);
   border: none;
   padding: 0.6rem 1.5rem;
@@ -172,11 +242,11 @@
   padding: 4rem 2rem;
   background-color: var(--white);
   border-radius: 8px;
-  border: 1px solid var(--gray-light);
+  border: 1px solid var(--color-border);
 }
 
 .no-orders p {
-  color: var(--gray-dark);
+  color: var(--color-text-secondary);
   font-size: 1.1rem;
 }
 
@@ -202,6 +272,7 @@
   max-height: 85vh;
   overflow-y: auto;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .modal-header {
@@ -209,8 +280,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem;
-  border-bottom: 1px solid var(--gray-light);
-  background-color: var(--primary-dark);
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-primary);
   color: var(--white);
   border-radius: 8px 8px 0 0;
 }
@@ -245,11 +316,11 @@
 }
 
 .detail-section h3 {
-  color: var(--primary-dark);
+  color: var(--color-primary);
   font-size: 1.2rem;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--primary-orange);
+  border-bottom: 2px solid var(--color-accent);
 }
 
 .detail-row {
@@ -260,12 +331,12 @@
 }
 
 .detail-row .label {
-  color: var(--gray-dark);
+  color: var(--color-text-secondary);
   font-weight: 500;
 }
 
 .detail-row .value {
-  color: var(--primary-black);
+  color: var(--color-text);
   font-weight: 600;
 }
 
@@ -285,13 +356,13 @@
 }
 
 .product-name-detail {
-  color: var(--primary-black);
+  color: var(--color-text);
   font-weight: 600;
   margin: 0 0 0.25rem 0;
 }
 
 .product-quantity {
-  color: var(--gray-dark);
+  color: var(--color-text-secondary);
   font-size: 0.9rem;
   margin: 0;
 }
@@ -302,13 +373,13 @@
 
 .product-price-detail p {
   margin: 0;
-  color: var(--primary-black);
+  color: var(--color-text);
   font-weight: 600;
 }
 
 .subtotal {
   font-size: 0.85rem;
-  color: var(--gray-dark);
+  color: var(--color-text-secondary);
   font-weight: 400 !important;
   margin-top: 0.25rem !important;
 }
@@ -327,7 +398,7 @@
 }
 
 .total-value {
-  color: var(--primary-orange);
+  color: var(--color-accent);
   font-size: 1.5rem;
 }
 
@@ -335,6 +406,19 @@
 @media (max-width: 768px) {
   .order-history-container {
     padding: 1rem;
+  }
+
+  .filters-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-label {
+    margin-bottom: 0.5rem;
+  }
+
+  .filter-btn {
+    width: 100%;
   }
 
   .order-body {

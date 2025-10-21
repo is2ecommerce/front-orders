@@ -1,0 +1,157 @@
+<div class="payment-container">
+  <!-- Mensaje de éxito -->
+  <div class="success-message" *ngIf="paymentSuccess">
+    <div class="success-icon">✓</div>
+    <h2>¡Pago Exitoso!</h2>
+    <p>Tu orden {{ orderNumber }} ha sido pagada correctamente</p>
+    <p class="redirect-text">Redirigiendo al historial...</p>
+  </div>
+
+  <!-- Formulario de pago -->
+  <div class="payment-content" *ngIf="!paymentSuccess">
+    <div class="payment-header">
+      <button class="btn-back" (click)="cancelPayment()">
+        ← Volver
+      </button>
+      <h1>Realizar Pago</h1>
+      <p class="subtitle">Completa los datos para finalizar tu compra</p>
+    </div>
+
+    <div class="payment-layout">
+      <!-- Resumen de la orden -->
+      <div class="order-summary-card">
+        <h3>Resumen de la Orden</h3>
+        <div class="summary-details">
+          <div class="summary-row">
+            <span class="label">Número de Orden:</span>
+            <span class="value">{{ orderNumber }}</span>
+          </div>
+          <div class="summary-row total-row">
+            <span class="label">Total a Pagar:</span>
+            <span class="value total">{{ formatCurrency(orderTotal) }}</span>
+          </div>
+        </div>
+
+        <div class="security-info">
+          <div class="security-icon">🔒</div>
+          <div>
+            <p class="security-title">Pago Seguro</p>
+            <p class="security-text">Tus datos están protegidos</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formulario -->
+      <div class="payment-form-card">
+        <form (ngSubmit)="processPayment()">
+          <!-- Información de la tarjeta -->
+          <div class="form-section">
+            <h3>Información de Tarjeta</h3>
+            
+            <div class="form-group">
+              <label for="cardNumber">Número de Tarjeta</label>
+              <input
+                type="text"
+                id="cardNumber"
+                name="cardNumber"
+                [(ngModel)]="paymentForm.cardNumber"
+                (input)="formatCardNumber($event)"
+                placeholder="1234 5678 9012 3456"
+                maxlength="19"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="cardHolder">Titular de la Tarjeta</label>
+              <input
+                type="text"
+                id="cardHolder"
+                name="cardHolder"
+                [(ngModel)]="paymentForm.cardHolder"
+                placeholder="Nombre completo"
+                required
+              />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="expiryDate">Fecha de Vencimiento</label>
+                <input
+                  type="text"
+                  id="expiryDate"
+                  name="expiryDate"
+                  [(ngModel)]="paymentForm.expiryDate"
+                  (input)="formatExpiryDate($event)"
+                  placeholder="MM/AA"
+                  maxlength="5"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="cvv">CVV</label>
+                <input
+                  type="text"
+                  id="cvv"
+                  name="cvv"
+                  [(ngModel)]="paymentForm.cvv"
+                  placeholder="123"
+                  maxlength="3"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Información de contacto -->
+          <div class="form-section">
+            <h3>Información de Contacto</h3>
+            
+            <div class="form-group">
+              <label for="email">Correo Electrónico</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                [(ngModel)]="paymentForm.email"
+                placeholder="tucorreo@ejemplo.com"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="phone">Teléfono</label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                [(ngModel)]="paymentForm.phone"
+                placeholder="+57 300 123 4567"
+                required
+              />
+            </div>
+          </div>
+
+          <!-- Botones -->
+          <div class="form-actions">
+            <button 
+              type="button" 
+              class="btn-cancel"
+              (click)="cancelPayment()"
+              [disabled]="isProcessing">
+              Cancelar
+            </button>
+            <button 
+              type="submit" 
+              class="btn-pay"
+              [disabled]="isProcessing">
+              <span *ngIf="!isProcessing">Pagar {{ formatCurrency(orderTotal) }}</span>
+              <span *ngIf="isProcessing">Procesando...</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
