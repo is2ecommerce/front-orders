@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { Order, OrderStatus, Product } from '../../models/order.model';
 
 @Component({
@@ -13,6 +14,8 @@ export class OrderHistory implements OnInit {
   filteredOrders: Order[] = [];
   selectedOrder: Order | null = null;
   selectedFilter: string = 'all';
+
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.loadMockOrders();
@@ -95,6 +98,20 @@ export class OrderHistory implements OnInit {
             quantity: 1
           }
         ]
+      },
+      {
+        orderNumber: 'ORD-2024-005',
+        date: new Date('2024-10-21'),
+        total: 189000,
+        status: OrderStatus.PENDING,
+        products: [
+          {
+            id: 8,
+            name: 'Tablet Samsung Galaxy Tab S9',
+            price: 189000,
+            quantity: 1
+          }
+        ]
       }
     ];
   }
@@ -115,6 +132,10 @@ export class OrderHistory implements OnInit {
 
   viewOrderDetails(order: Order): void {
     this.selectedOrder = order;
+  }
+
+  payOrder(order: Order): void {
+    this.router.navigate(['/pago'], { state: { order } });
   }
 
   closeOrderDetails(): void {
