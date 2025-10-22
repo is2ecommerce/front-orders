@@ -127,6 +127,8 @@ export class OrderHistory implements OnInit {
       this.filteredOrders = this.orders.filter(order => order.status === OrderStatus.SHIPPED);
     } else if (filter === 'processing') {
       this.filteredOrders = this.orders.filter(order => order.status === OrderStatus.PROCESSING);
+    } else if (filter === 'pending') {
+      this.filteredOrders = this.orders.filter(order => order.status === OrderStatus.PENDING);
     }
   }
 

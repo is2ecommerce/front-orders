@@ -31,6 +31,12 @@
       (click)="filterOrders('processing')">
       En proceso
     </button>
+    <button 
+      class="filter-btn" 
+      [class.active]="selectedFilter === 'pending'"
+      (click)="filterOrders('pending')">
+      Pendiente
+    </button>
   </div>
 
   <div class="orders-list" *ngIf="filteredOrders.length > 0; else noOrders">
