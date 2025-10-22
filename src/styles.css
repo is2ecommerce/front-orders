@@ -22,3 +22,11 @@
   --color-border: var(--gray-light);
   --color-link: var(--secondary-blue);
 }
+
+/* Aplicar fondo gris a toda la página */
+html, body {
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
