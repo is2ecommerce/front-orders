@@ -81,6 +81,160 @@
   font-size: 1rem;
 }
 
+/* Sidebar Container (contiene Progress Bar y Resumen) */
+.sidebar-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: sticky;
+  top: 2rem;
+  align-self: start;
+}
+
+/* Progress Bar */
+.progress-bar-container {
+  padding: 1.5rem;
+  background-color: var(--white);
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s ease;
+}
+
+.progress-bar-container:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* Cuando está sticky y visible, se mantiene compacta */
+@media (max-width: 768px) {
+  .sidebar-container {
+    position: static;
+    top: auto;
+  }
+
+  .progress-bar-container {
+    padding: 1rem 1.5rem;
+  }
+}
+
+.progress-steps {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  align-items: center;
+}
+
+.progress-steps::before {
+  content: '';
+  position: absolute;
+  top: 30px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: var(--color-border);
+  z-index: 0;
+}
+
+.progress-line {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-accent), var(--secondary-blue));
+  z-index: 1;
+  transition: width 0.5s ease;
+  border-radius: 2px;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  flex: 1;
+}
+
+.step-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--white);
+  border: 3px solid var(--color-border);
+  transition: all 0.3s ease;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 3;
+}
+
+.step-number {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  transition: color 0.3s ease;
+}
+
+.step-label {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  text-align: center;
+  transition: color 0.3s ease;
+}
+
+/* Paso activo */
+.step.active .step-circle {
+  border-color: var(--color-accent);
+  background-color: var(--color-accent);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(228, 121, 17, 0.3);
+}
+
+.step.active .step-number {
+  color: var(--white);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.step.active .step-label {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+/* Paso completado */
+.step.completed .step-circle {
+  border-color: var(--secondary-blue);
+  background-color: var(--secondary-blue);
+}
+
+.step.completed .step-number {
+  color: var(--white);
+  font-size: 1.5rem;
+}
+
+.step.completed .step-label {
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+/* Paso pendiente */
+.step.pending .step-circle {
+  border-color: var(--color-border);
+  background-color: var(--white);
+}
+
+.step.pending .step-number {
+  color: var(--color-text-secondary);
+}
+
+.step.pending .step-label {
+  color: var(--color-text-secondary);
+}
+
 /* Layout principal */
 .payment-layout {
   display: grid;
@@ -96,8 +250,6 @@
   border-radius: 8px;
   padding: 2rem;
   height: fit-content;
-  position: sticky;
-  top: 2rem;
 }
 
 .order-summary-card h3 {
@@ -293,8 +445,22 @@
     gap: 2rem;
   }
 
-  .order-summary-card {
+  .sidebar-container {
     position: static;
+    top: auto;
+  }
+
+  .progress-bar-container {
+    padding: 1.5rem;
+  }
+
+  .step-circle {
+    width: 50px;
+    height: 50px;
+  }
+
+  .step-label {
+    font-size: 0.8rem;
   }
 }
 
@@ -305,6 +471,40 @@
 
   .payment-header h1 {
     font-size: 1.5rem;
+  }
+
+  .progress-bar-container {
+    padding: 1rem;
+    margin: 1.5rem 0;
+  }
+
+  .progress-steps {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+
+  .progress-steps::before,
+  .progress-line {
+    display: none;
+  }
+
+  .step {
+    flex-direction: row;
+    width: 100%;
+    gap: 1rem;
+  }
+
+  .step-circle {
+    width: 45px;
+    height: 45px;
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+
+  .step-label {
+    text-align: left;
+    font-size: 0.85rem;
   }
 
   .form-row {
@@ -333,6 +533,23 @@
 @media (max-width: 480px) {
   .payment-container {
     padding: 0.5rem;
+  }
+
+  .progress-bar-container {
+    padding: 0.75rem;
+  }
+
+  .step-circle {
+    width: 40px;
+    height: 40px;
+  }
+
+  .step-number {
+    font-size: 1rem;
+  }
+
+  .step-label {
+    font-size: 0.75rem;
   }
 
   .payment-form-card {

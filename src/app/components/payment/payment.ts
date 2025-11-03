@@ -23,6 +23,7 @@ export class Payment implements OnInit {
   orderTotal: number = 0;
   isProcessing: boolean = false;
   paymentSuccess: boolean = false;
+  currentStep: number = 1;
   
   paymentForm: PaymentForm = {
     cardNumber: '',
@@ -32,6 +33,12 @@ export class Payment implements OnInit {
     email: '',
     phone: ''
   };
+
+  steps = [
+    { number: 1, label: 'Información de Pago', completed: false },
+    { number: 2, label: 'Procesando', completed: false },
+    { number: 3, label: 'Completado', completed: false }
+  ];
 
   constructor(
     private router: Router,
@@ -44,6 +51,7 @@ export class Payment implements OnInit {
       this.orderNumber = params['orderNumber'] || '';
       this.orderTotal = parseFloat(params['total']) || 0;
     });
+    this.updateSteps();
   }
 
   formatCardNumber(event: any): void {
@@ -91,11 +99,17 @@ export class Payment implements OnInit {
       return;
     }
 
+    // Avanzar al paso 2 (Procesando)
+    this.currentStep = 2;
+    this.updateSteps();
     this.isProcessing = true;
 
     // Simular procesamiento de pago
     setTimeout(() => {
       this.isProcessing = false;
+      // Avanzar al paso 3 (Completado)
+      this.currentStep = 3;
+      this.updateSteps();
       this.paymentSuccess = true;
       
       // Redirigir al historial después de 3 segundos
@@ -103,6 +117,42 @@ export class Payment implements OnInit {
         this.router.navigate(['/historial-ordenes']);
       }, 3000);
     }, 2000);
+  }
+
+  updateSteps(): void {
+    this.steps.forEach((step, index) => {
+      step.completed = index < this.currentStep;
+    });
+  }
+
+  getStepClass(stepNumber: number): string {
+    if (stepNumber < this.currentStep) {
+      return 'completed';
+    } else if (stepNumber === this.currentStep) {
+      return 'active';
+    } else {
+      return 'pending';
+    }
+  }
+
+  getProgressWidth(): number {
+    // La línea se llena hasta el centro del círculo del paso activo
+    // Para 3 pasos distribuidos uniformemente:
+    // - Paso 1 activo: línea hasta el centro del círculo 1 ≈ 16.67% (centro del primer tercio)
+    // - Paso 2 activo: línea hasta el centro del círculo 2 = 50% (centro del segundo tercio)
+    // - Paso 3 activo: línea hasta el centro del círculo 3 ≈ 83.33% (centro del tercer tercio)
+    // Pero visualmente mejor hasta el final en paso 3
+    
+    if (this.currentStep === 1) {
+      // Paso 1: línea hasta el centro del primer círculo
+      return 16.67;
+    } else if (this.currentStep === 2) {
+      // Paso 2: línea hasta el centro del segundo círculo
+      return 50;
+    } else {
+      // Paso 3: línea completa hasta el final
+      return 100;
+    }
   }
 
   cancelPayment(): void {
