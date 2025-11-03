@@ -4,7 +4,69 @@
     <p class="subtitle">Consulta todas tus compras anteriores</p>
   </div>
 
-  <!-- Filtros -->
+  <!-- Barra de búsqueda y filtros -->
+  <div class="search-filters-section">
+    <!-- Campo de búsqueda -->
+    <div class="search-container">
+      <div class="search-input-wrapper">
+        <span class="search-icon">🔍</span>
+        <input 
+          type="text" 
+          class="search-input"
+          placeholder="Buscar por número de orden o nombre de producto..."
+          [(ngModel)]="searchTerm"
+          (input)="onSearchChange()"
+        />
+        <button 
+          class="clear-search-btn" 
+          *ngIf="searchTerm"
+          (click)="searchTerm = ''; onSearchChange()"
+          title="Limpiar búsqueda">
+          ×
+        </button>
+      </div>
+    </div>
+
+    <!-- Filtros por fecha -->
+    <div class="date-filters-container">
+      <label class="date-filter-label">
+        <span>Desde:</span>
+        <input 
+          type="date" 
+          class="date-input"
+          [(ngModel)]="dateFrom"
+          (change)="onDateChange()"
+        />
+      </label>
+      <label class="date-filter-label">
+        <span>Hasta:</span>
+        <input 
+          type="date" 
+          class="date-input"
+          [(ngModel)]="dateTo"
+          (change)="onDateChange()"
+          [min]="dateFrom"
+        />
+      </label>
+      <button 
+        class="clear-date-btn"
+        *ngIf="dateFrom || dateTo"
+        (click)="dateFrom = ''; dateTo = ''; onDateChange()"
+        title="Limpiar fechas">
+        Limpiar fechas
+      </button>
+    </div>
+
+    <!-- Botón para limpiar todos los filtros -->
+    <button 
+      class="clear-all-filters-btn"
+      *ngIf="hasActiveFilters()"
+      (click)="clearFilters()">
+      🗑️ Limpiar todos los filtros
+    </button>
+  </div>
+
+  <!-- Filtros por estado -->
   <div class="filters-container">
     <span class="filter-label">Filtrar por estado:</span>
     <button 

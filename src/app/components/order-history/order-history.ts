@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Order, OrderStatus, Product } from '../../models/order.model';
 
 @Component({
   selector: 'app-order-history',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './order-history.html',
   styleUrl: './order-history.css'
 })
@@ -16,12 +17,17 @@ export class OrderHistory implements OnInit {
   selectedFilter: string = 'all';
   errorMessage: string = '';
   showError: boolean = false;
+  
+  // Filtros de búsqueda
+  searchTerm: string = '';
+  dateFrom: string = '';
+  dateTo: string = '';
 
   constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.loadMockOrders();
-    this.filteredOrders = this.orders;
+    this.applyFilters();
   }
 
   loadMockOrders(): void {
@@ -134,20 +140,88 @@ export class OrderHistory implements OnInit {
 
   filterOrders(filter: string): void {
     this.selectedFilter = filter;
+    this.applyFilters();
+  }
 
-    if (filter === 'all') {
-      this.filteredOrders = this.orders;
-    } else if (filter === 'delivered') {
-      this.filteredOrders = this.orders.filter(order => order.status === OrderStatus.DELIVERED);
-    } else if (filter === 'shipped') {
-      this.filteredOrders = this.orders.filter(order => order.status === OrderStatus.SHIPPED);
-    } else if (filter === 'processing') {
-      this.filteredOrders = this.orders.filter(order => order.status === OrderStatus.PROCESSING);
-    } else if (filter === 'pending') {
-      this.filteredOrders = this.orders.filter(order => order.status === OrderStatus.PENDING);
-    } else if (filter === 'cancelled') {
-      this.filteredOrders = this.orders.filter(order => order.status === OrderStatus.CANCELLED);
+  onSearchChange(): void {
+    this.applyFilters();
+  }
+
+  onDateChange(): void {
+    this.applyFilters();
+  }
+
+  clearFilters(): void {
+    this.searchTerm = '';
+    this.dateFrom = '';
+    this.dateTo = '';
+    this.selectedFilter = 'all';
+    this.applyFilters();
+  }
+
+  applyFilters(): void {
+    let result = [...this.orders];
+
+    // Filtro por estado
+    if (this.selectedFilter !== 'all') {
+      const statusMap: { [key: string]: OrderStatus } = {
+        'delivered': OrderStatus.DELIVERED,
+        'shipped': OrderStatus.SHIPPED,
+        'processing': OrderStatus.PROCESSING,
+        'pending': OrderStatus.PENDING,
+        'cancelled': OrderStatus.CANCELLED
+      };
+      
+      const status = statusMap[this.selectedFilter];
+      if (status) {
+        result = result.filter(order => order.status === status);
+      }
     }
+
+    // Filtro por búsqueda (número de orden o nombre de producto)
+    if (this.searchTerm.trim() !== '') {
+      const searchLower = this.searchTerm.toLowerCase().trim();
+      result = result.filter(order => {
+        // Buscar en número de orden
+        if (order.orderNumber.toLowerCase().includes(searchLower)) {
+          return true;
+        }
+        // Buscar en nombres de productos
+        return order.products.some(product => 
+          product.name.toLowerCase().includes(searchLower)
+        );
+      });
+    }
+
+    // Filtro por rango de fechas
+    if (this.dateFrom) {
+      const fromDate = new Date(this.dateFrom);
+      fromDate.setHours(0, 0, 0, 0);
+      result = result.filter(order => {
+        const orderDate = new Date(order.date);
+        orderDate.setHours(0, 0, 0, 0);
+        return orderDate >= fromDate;
+      });
+    }
+
+    if (this.dateTo) {
+      const toDate = new Date(this.dateTo);
+      toDate.setHours(23, 59, 59, 999);
+      result = result.filter(order => {
+        const orderDate = new Date(order.date);
+        orderDate.setHours(0, 0, 0, 0);
+        return orderDate <= toDate;
+      });
+    }
+
+    this.filteredOrders = result;
+  }
+
+  hasActiveFilters(): boolean {
+    return this.searchTerm.trim() !== '' || 
+           this.dateFrom !== '' || 
+           this.dateTo !== '' || 
+           this.selectedFilter !== 'all';
   }
 
   viewOrderDetails(order: Order): void {
