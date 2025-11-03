@@ -14,6 +14,8 @@ export class OrderHistory implements OnInit {
   filteredOrders: Order[] = [];
   selectedOrder: Order | null = null;
   selectedFilter: string = 'all';
+  errorMessage: string = '';
+  showError: boolean = false;
 
   constructor(private router: Router) {}
 
@@ -112,6 +114,20 @@ export class OrderHistory implements OnInit {
             quantity: 1
           }
         ]
+      },
+      {
+        orderNumber: 'ORD-2024-006',
+        date: new Date('2024-09-15'),
+        total: 320000,
+        status: OrderStatus.CANCELLED,
+        products: [
+          {
+            id: 9,
+            name: 'Smartphone Samsung Galaxy S23',
+            price: 320000,
+            quantity: 1
+          }
+        ]
       }
     ];
   }
@@ -129,19 +145,49 @@ export class OrderHistory implements OnInit {
       this.filteredOrders = this.orders.filter(order => order.status === OrderStatus.PROCESSING);
     } else if (filter === 'pending') {
       this.filteredOrders = this.orders.filter(order => order.status === OrderStatus.PENDING);
+    } else if (filter === 'cancelled') {
+      this.filteredOrders = this.orders.filter(order => order.status === OrderStatus.CANCELLED);
     }
   }
 
   viewOrderDetails(order: Order): void {
+    // Permitir ver detalles de órdenes canceladas
     this.selectedOrder = order;
+    this.hideError();
   }
 
   payOrder(order: Order): void {
+    // Validar que la orden no esté cancelada
+    if (order.status === OrderStatus.CANCELLED) {
+      this.showErrorMessage('Las órdenes canceladas no pueden ser pagadas. Esta orden fue cancelada y no permite realizar pagos posteriores.');
+      return;
+    }
+    
+    this.hideError();
     this.router.navigate(['/pago'], { state: { order } });
   }
 
   closeOrderDetails(): void {
     this.selectedOrder = null;
+    this.hideError();
+  }
+
+  isOrderCancelled(order: Order): boolean {
+    return order.status === OrderStatus.CANCELLED;
+  }
+
+  showErrorMessage(message: string): void {
+    this.errorMessage = message;
+    this.showError = true;
+    // Ocultar el mensaje después de 5 segundos
+    setTimeout(() => {
+      this.hideError();
+    }, 5000);
+  }
+
+  hideError(): void {
+    this.showError = false;
+    this.errorMessage = '';
   }
 
   getStatusClass(status: OrderStatus): string {

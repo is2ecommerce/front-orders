@@ -37,10 +37,25 @@
       (click)="filterOrders('pending')">
       Pendiente
     </button>
+    <button 
+      class="filter-btn" 
+      [class.active]="selectedFilter === 'cancelled'"
+      (click)="filterOrders('cancelled')">
+      Cancelada
+    </button>
+  </div>
+
+  <!-- Mensaje de error informativo -->
+  <div class="error-message" *ngIf="showError">
+    <div class="error-content">
+      <span class="error-icon">⚠️</span>
+      <span class="error-text">{{ errorMessage }}</span>
+      <button class="error-close" (click)="hideError()">&times;</button>
+    </div>
   </div>
 
   <div class="orders-list" *ngIf="filteredOrders.length > 0; else noOrders">
-    <div class="order-card" *ngFor="let order of filteredOrders">
+    <div class="order-card" *ngFor="let order of filteredOrders" [class.cancelled-order]="isOrderCancelled(order)">
       <div class="order-header">
         <div class="order-info">
           <h3 class="order-number">{{ order.orderNumber }}</h3>
@@ -72,11 +87,21 @@
       <div class="order-footer">
         <button 
           class="btn-pay-order" 
-          *ngIf="order.status === 'Pendiente'"
-          (click)="payOrder(order)"> Pagar Orden
+          *ngIf="order.status === 'Pendiente' && !isOrderCancelled(order)"
+          (click)="payOrder(order)">
+          Pagar Orden
         </button>
-        <button class="btn-details" (click)="viewOrderDetails(order)"> Ver detalles
+        <button 
+          class="btn-details" 
+          (click)="viewOrderDetails(order)">
+          Ver detalles
         </button>
+      </div>
+      
+      <!-- Mensaje informativo para órdenes canceladas -->
+      <div class="cancelled-warning" *ngIf="isOrderCancelled(order)">
+        <span class="warning-icon">ℹ️</span>
+        <span class="warning-text">Esta orden fue cancelada y no permite cambios de estado ni pagos posteriores.</span>
       </div>
     </div>
   </div>
