@@ -18,8 +18,27 @@
     </div>
 
     <div class="payment-layout">
-      <!-- Resumen de la orden -->
-      <div class="order-summary-card">
+      <!-- Sidebar con Progress Bar y Resumen -->
+      <div class="sidebar-container">
+        <!-- Progress Bar -->
+        <div class="progress-bar-container">
+          <div class="progress-steps">
+            <div 
+              *ngFor="let step of steps" 
+              class="step"
+              [ngClass]="getStepClass(step.number)">
+              <div class="step-circle">
+                <span class="step-number" *ngIf="step.number < currentStep">✓</span>
+                <span class="step-number" *ngIf="step.number >= currentStep">{{ step.number }}</span>
+              </div>
+              <div class="step-label">{{ step.label }}</div>
+            </div>
+            <div class="progress-line" [style.width.%]="getProgressWidth()"></div>
+          </div>
+        </div>
+
+        <!-- Resumen de la orden -->
+        <div class="order-summary-card">
         <h3>Resumen de la Orden</h3>
         <div class="summary-details">
           <div class="summary-row">
@@ -39,6 +58,7 @@
             <p class="security-text">Tus datos están protegidos</p>
           </div>
         </div>
+      </div>
       </div>
 
       <!-- Formulario -->

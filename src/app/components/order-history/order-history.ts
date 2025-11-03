@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Order, OrderStatus, Product } from '../../models/order.model';
 
 @Component({
   selector: 'app-order-history',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './order-history.html',
   styleUrl: './order-history.css'
 })
@@ -14,12 +15,19 @@ export class OrderHistory implements OnInit {
   filteredOrders: Order[] = [];
   selectedOrder: Order | null = null;
   selectedFilter: string = 'all';
+  errorMessage: string = '';
+  showError: boolean = false;
+  
+  // Filtros de búsqueda
+  searchTerm: string = '';
+  dateFrom: string = '';
+  dateTo: string = '';
 
   constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.loadMockOrders();
-    this.filteredOrders = this.orders;
+    this.applyFilters();
   }
 
   loadMockOrders(): void {
@@ -112,36 +120,148 @@ export class OrderHistory implements OnInit {
             quantity: 1
           }
         ]
+      },
+      {
+        orderNumber: 'ORD-2024-006',
+        date: new Date('2024-09-15'),
+        total: 320000,
+        status: OrderStatus.CANCELLED,
+        products: [
+          {
+            id: 9,
+            name: 'Smartphone Samsung Galaxy S23',
+            price: 320000,
+            quantity: 1
+          }
+        ]
       }
     ];
   }
 
   filterOrders(filter: string): void {
     this.selectedFilter = filter;
+    this.applyFilters();
+  }
 
-    if (filter === 'all') {
-      this.filteredOrders = this.orders;
-    } else if (filter === 'delivered') {
-      this.filteredOrders = this.orders.filter(order => order.status === OrderStatus.DELIVERED);
-    } else if (filter === 'shipped') {
-      this.filteredOrders = this.orders.filter(order => order.status === OrderStatus.SHIPPED);
-    } else if (filter === 'processing') {
-      this.filteredOrders = this.orders.filter(order => order.status === OrderStatus.PROCESSING);
-    } else if (filter === 'pending') {
-      this.filteredOrders = this.orders.filter(order => order.status === OrderStatus.PENDING);
+  onSearchChange(): void {
+    this.applyFilters();
+  }
+
+  onDateChange(): void {
+    this.applyFilters();
+  }
+
+  clearFilters(): void {
+    this.searchTerm = '';
+    this.dateFrom = '';
+    this.dateTo = '';
+    this.selectedFilter = 'all';
+    this.applyFilters();
+  }
+
+  applyFilters(): void {
+    let result = [...this.orders];
+
+    // Filtro por estado
+    if (this.selectedFilter !== 'all') {
+      const statusMap: { [key: string]: OrderStatus } = {
+        'delivered': OrderStatus.DELIVERED,
+        'shipped': OrderStatus.SHIPPED,
+        'processing': OrderStatus.PROCESSING,
+        'pending': OrderStatus.PENDING,
+        'cancelled': OrderStatus.CANCELLED
+      };
+      
+      const status = statusMap[this.selectedFilter];
+      if (status) {
+        result = result.filter(order => order.status === status);
+      }
     }
+
+    // Filtro por búsqueda (número de orden o nombre de producto)
+    if (this.searchTerm.trim() !== '') {
+      const searchLower = this.searchTerm.toLowerCase().trim();
+      result = result.filter(order => {
+        // Buscar en número de orden
+        if (order.orderNumber.toLowerCase().includes(searchLower)) {
+          return true;
+        }
+        // Buscar en nombres de productos
+        return order.products.some(product => 
+          product.name.toLowerCase().includes(searchLower)
+        );
+      });
+    }
+
+    // Filtro por rango de fechas
+    if (this.dateFrom) {
+      const fromDate = new Date(this.dateFrom);
+      fromDate.setHours(0, 0, 0, 0);
+      result = result.filter(order => {
+        const orderDate = new Date(order.date);
+        orderDate.setHours(0, 0, 0, 0);
+        return orderDate >= fromDate;
+      });
+    }
+
+    if (this.dateTo) {
+      const toDate = new Date(this.dateTo);
+      toDate.setHours(23, 59, 59, 999);
+      result = result.filter(order => {
+        const orderDate = new Date(order.date);
+        orderDate.setHours(0, 0, 0, 0);
+        return orderDate <= toDate;
+      });
+    }
+
+    this.filteredOrders = result;
+  }
+
+  hasActiveFilters(): boolean {
+    return this.searchTerm.trim() !== '' || 
+           this.dateFrom !== '' || 
+           this.dateTo !== '' || 
+           this.selectedFilter !== 'all';
   }
 
   viewOrderDetails(order: Order): void {
+    // Permitir ver detalles de órdenes canceladas
     this.selectedOrder = order;
+    this.hideError();
   }
 
   payOrder(order: Order): void {
+    // Validar que la orden no esté cancelada
+    if (order.status === OrderStatus.CANCELLED) {
+      this.showErrorMessage('Las órdenes canceladas no pueden ser pagadas. Esta orden fue cancelada y no permite realizar pagos posteriores.');
+      return;
+    }
+    
+    this.hideError();
     this.router.navigate(['/pago'], { state: { order } });
   }
 
   closeOrderDetails(): void {
     this.selectedOrder = null;
+    this.hideError();
+  }
+
+  isOrderCancelled(order: Order): boolean {
+    return order.status === OrderStatus.CANCELLED;
+  }
+
+  showErrorMessage(message: string): void {
+    this.errorMessage = message;
+    this.showError = true;
+    // Ocultar el mensaje después de 5 segundos
+    setTimeout(() => {
+      this.hideError();
+    }, 5000);
+  }
+
+  hideError(): void {
+    this.showError = false;
+    this.errorMessage = '';
   }
 
   getStatusClass(status: OrderStatus): string {
