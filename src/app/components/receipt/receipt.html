@@ -1,0 +1,75 @@
+<div class="receipt-container" *ngIf="order as o; else noOrder">
+  <div class="receipt-header">
+    <button class="btn-back" (click)="backToHistory()">← Volver</button>
+    <h1>Recibo de Pago</h1>
+    <p class="subtitle">Gracias por tu compra</p>
+  </div>
+
+  <div class="receipt-layout">
+    <!-- Encabezado con datos generales -->
+    <div class="receipt-card">
+      <div class="receipt-meta">
+        <div class="meta-row">
+          <span class="label">N° de Orden:</span>
+          <span class="value">{{ o.orderNumber }}</span>
+        </div>
+        <div class="meta-row">
+          <span class="label">Fecha del pago:</span>
+          <span class="value">{{ formatDate(getPaymentDate()) }}</span>
+        </div>
+        <div class="meta-row">
+          <span class="label">Recibo #:</span>
+          <span class="value">{{ payment?.id || ('RCP-' + (o.orderNumber || 'NA')) }}</span>
+        </div>
+        <div class="meta-row">
+          <span class="label">Estado de la orden:</span>
+          <span class="value"><span class="status-badge status-delivered">Pagado</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lista de productos -->
+    <div class="receipt-card">
+      <h3>Productos</h3>
+      <div class="product-header">
+        <span>Producto</span>
+        <span>Cantidad</span>
+        <span>Precio</span>
+        <span>Subtotal</span>
+      </div>
+      <div class="product-row" *ngFor="let p of o.products">
+        <span class="product-name">{{ p.name }}</span>
+        <span>x{{ p.quantity }}</span>
+        <span>{{ formatCurrency(p.price) }}</span>
+        <span class="subtotal">{{ formatCurrency(lineTotal(p)) }}</span>
+      </div>
+
+      <div class="totals">
+        <div class="totals-row">
+          <span class="label">Subtotal</span>
+          <span class="value">{{ formatCurrency(subtotal) }}</span>
+        </div>
+        <div class="totals-row total">
+          <span class="label">Total pagado</span>
+          <span class="value">{{ formatCurrency(grandTotal) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Acciones -->
+    <div class="actions">
+      <button class="btn-secondary" (click)="backToHistory()">Volver al historial</button>
+      <button class="btn-primary" (click)="print()">Imprimir</button>
+    </div>
+  </div>
+</div>
+
+<ng-template #noOrder>
+  <div class="receipt-container">
+    <div class="empty-card">
+      <h2>No hay datos de recibo</h2>
+      <p class="subtitle">Vuelve al historial y selecciona una orden pendiente para pagar.</p>
+      <button class="btn-primary" (click)="backToHistory()">Ir al historial</button>
+    </div>
+  </div>
+</ng-template>

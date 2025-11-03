@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Order } from '../../models/order.model';
 
 interface PaymentForm {
   cardNumber: string;
@@ -112,10 +113,11 @@ export class Payment implements OnInit {
       this.updateSteps();
       this.paymentSuccess = true;
       
-      // Redirigir al historial después de 3 segundos
+      // Redirigir al recibo después de 2 segundos
       setTimeout(() => {
-        this.router.navigate(['/historial-ordenes']);
-      }, 3000);
+        const payment = { id: `RCP-${Date.now()}`, date: new Date() };
+        this.router.navigate(['/recibo'], { state: { order: this.currentOrder, payment } });
+      }, 2000);
     }, 2000);
   }
 

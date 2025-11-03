@@ -1,0 +1,100 @@
+.receipt-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  min-height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.receipt-header {
+  margin-bottom: 2rem;
+}
+
+.btn-back {
+  background: none;
+  border: none;
+  color: var(--color-link);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  margin-bottom: 1rem;
+  display: inline-block;
+  transition: color 0.3s ease;
+}
+
+.btn-back:hover { color: var(--color-accent); }
+
+.receipt-header h1 {
+  color: var(--color-text);
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle { color: var(--color-text-secondary); font-size: 1rem; }
+
+.receipt-layout { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.receipt-card {
+  background-color: var(--white);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.receipt-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem 2rem; }
+.meta-row { display: flex; justify-content: space-between; border-bottom: 1px solid var(--color-border); padding: 0.5rem 0; }
+.meta-row .label { color: var(--color-text-secondary); font-weight: 500; }
+.meta-row .value { color: var(--color-text); font-weight: 600; }
+
+.status-badge { display: inline-block; padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.85rem; font-weight: 500; }
+.status-delivered { background-color: #d4edda; color: #155724; }
+
+.receipt-card h3 {
+  color: var(--color-text);
+  font-size: 1.2rem;
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--color-accent);
+}
+
+.product-header, .product-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 1rem;
+  align-items: center;
+}
+
+.product-header { color: var(--color-text-secondary); font-weight: 600; padding-bottom: 0.5rem; border-bottom: 1px solid var(--color-border); }
+.product-row { padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0; }
+.product-row:last-of-type { border-bottom: none; }
+.product-name { color: var(--color-text); font-weight: 500; }
+.subtotal { font-weight: 600; }
+
+.totals { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.totals-row { display: flex; justify-content: space-between; }
+.totals-row .label { color: var(--color-text-secondary); font-weight: 500; }
+.totals-row .value { color: var(--color-text); font-weight: 600; }
+.totals-row.total .value { color: var(--color-accent); font-size: 1.25rem; }
+
+.actions { display: flex; gap: 1rem; justify-content: flex-end; }
+.btn-primary {
+  padding: 0.75rem 1.5rem; border: none; background-color: var(--color-accent); color: var(--white);
+  border-radius: 6px; font-weight: 600; cursor: pointer; transition: background-color 0.3s ease;
+}
+.btn-primary:hover { background-color: #c86500; }
+
+.btn-secondary {
+  padding: 0.75rem 1.5rem; border: 2px solid var(--color-border); background-color: var(--white); color: var(--color-text-secondary);
+  border-radius: 6px; font-weight: 500; cursor: pointer; transition: all 0.3s ease;
+}
+.btn-secondary:hover { border-color: var(--color-accent); color: var(--color-accent); }
+
+.empty-card { text-align: center; background: var(--white); border: 1px solid var(--color-border); border-radius: 8px; padding: 2rem; }
+
+@media (max-width: 768px) {
+  .receipt-container { padding: 1rem; }
+  .receipt-meta { grid-template-columns: 1fr; }
+  .product-header, .product-row { grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 0.5rem; }
+  .actions { flex-direction: column; align-items: stretch; }
+}
