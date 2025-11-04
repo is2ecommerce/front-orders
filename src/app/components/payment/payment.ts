@@ -25,6 +25,7 @@ export class Payment implements OnInit {
   isProcessing: boolean = false;
   paymentSuccess: boolean = false;
   currentStep: number = 1;
+  currentOrder?: Order; // o el tipo que corresponda
   
   paymentForm: PaymentForm = {
     cardNumber: '',
