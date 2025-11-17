@@ -1,0 +1,52 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <!-- Logo y nombre -->
+    <div class="navbar-logo" (click)="goToHome()">
+      <div class="logo-circle">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="logo-text">TechStore</span>
+    </div>
+
+    <!-- Barra de búsqueda -->
+    <div class="navbar-search">
+      <form (ngSubmit)="onSearch()" class="search-form">
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Buscar productos, marcas y más..."
+          [(ngModel)]="searchQuery"
+          name="searchQuery"
+        />
+        <button type="submit" class="search-button" aria-label="Buscar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+            <path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </form>
+    </div>
+
+    <!-- Iconos de usuario y carrito -->
+    <div class="navbar-actions">
+      <button class="action-button" (click)="goToProfile()" aria-label="Perfil">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </button>
+      <button class="action-button" (click)="goToCart()" aria-label="Carrito">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 22a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" fill="currentColor"/>
+          <path d="M20 22a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" fill="currentColor"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
