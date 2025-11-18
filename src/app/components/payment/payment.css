@@ -62,20 +62,34 @@
 }
 
 .btn-back {
-  background: none;
-  border: none;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   color: var(--color-link);
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
-  padding: 0.5rem 0;
+  padding: 0.6rem 1.2rem;
   margin-bottom: 1rem;
-  display: inline-block;
-  transition: color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 126, 185, 0.2);
 }
 
 .btn-back:hover {
-  color: var(--color-accent);
+  background: linear-gradient(135deg, var(--secondary-blue), var(--secondary-blue-light));
+  color: var(--white);
+  border-color: var(--secondary-blue);
+  box-shadow: 0 6px 16px rgba(0, 126, 185, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn-back:active {
+  transform: translateY(0);
 }
 
 .payment-header h1 {
