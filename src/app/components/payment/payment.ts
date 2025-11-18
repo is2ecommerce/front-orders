@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Order } from '../../models/order.model';
+import { Order, OrderStatus } from '../../models/order.model';
 
 interface PaymentForm {
   cardNumber: string;
@@ -17,7 +17,7 @@ interface PaymentForm {
   selector: 'app-payment',
   imports: [CommonModule, FormsModule],
   templateUrl: './payment.html',
-  styleUrl: './payment.css'
+  styleUrls: ['./payment.css']
 })
 export class Payment implements OnInit {
   orderNumber: string = '';
@@ -25,7 +25,7 @@ export class Payment implements OnInit {
   isProcessing: boolean = false;
   paymentSuccess: boolean = false;
   currentStep: number = 1;
-  currentOrder?: Order; // o el tipo que corresponda
+  currentOrder: Order | null = null; // ✅ Propiedad agregada
   
   paymentForm: PaymentForm = {
     cardNumber: '',
@@ -52,6 +52,15 @@ export class Payment implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.orderNumber = params['orderNumber'] || '';
       this.orderTotal = parseFloat(params['total']) || 0;
+
+      // ✅ Crear objeto Order básico con esos datos
+      this.currentOrder = {
+        orderNumber: this.orderNumber,
+        date: new Date(),
+        total: this.orderTotal,
+        status: OrderStatus.PENDING,
+        products: []
+      } as Order;
     });
     this.updateSteps();
   }
