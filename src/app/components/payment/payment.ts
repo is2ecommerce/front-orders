@@ -26,7 +26,7 @@ export class Payment implements OnInit {
   paymentSuccess: boolean = false;
   currentStep: number = 1;
   currentOrder: Order | null = null; // ✅ Propiedad agregada
-
+  
   paymentForm: PaymentForm = {
     cardNumber: '',
     cardHolder: '',
